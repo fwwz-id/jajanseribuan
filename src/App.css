@@ -1,0 +1,8 @@
+/* Custom MUI */
+.MuiDialog-paperScrollPaper ::-webkit-scrollbar{
+    width: 3.5px;
+}
+.MuiDialog-paperScrollPaper ::-webkit-scrollbar-thumb{
+    border-radius: 15px;
+    background-color: white;
+}

@@ -1,7 +1,7 @@
-const url = "https://jajananseribuan-api.herokuapp.com";
+const url = "https://jajananseribuan-api.herokuapp.com/api";
 
 export async function Create(endpoint, data) {
-	return await fetch(`${url}/api/v1/${endpoint}`, {
+	return await fetch(`${url}/v1/${endpoint}`, {
 		method: "POST",
 		mode: "cors",
 		headers: {
@@ -12,11 +12,11 @@ export async function Create(endpoint, data) {
 }
 
 export async function Get(endpoint) {
-	return await (await fetch(`${url}/api/v1/${endpoint}`)).json();
+	return await (await fetch(`${url}/v1/${endpoint}`)).json();
 }
 
 export async function Update(endpoint, id, data) {
-	return await fetch(`${url}/api/v1/${endpoint}/${id}`, {
+	return await fetch(`${url}/v1/${endpoint}/${id}`, {
 		method: "PUT",
 		mode: "cors",
 		headers: {
@@ -27,7 +27,7 @@ export async function Update(endpoint, id, data) {
 }
 
 export async function Delete(endpoint, id) {
-	return await fetch(`${url}/api/v1/${endpoint}/${id}`, {
+	return await fetch(`${url}/v1/${endpoint}/${id}`, {
 		method: "DELETE",
 		mode: "cors",
 		headers: {

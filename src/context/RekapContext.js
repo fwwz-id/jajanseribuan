@@ -1,39 +1,45 @@
 import { createContext, useEffect, useState } from "react";
 
+// utils
 import { Get } from "../utils/crud";
 
 export const RekapContext = createContext();
 
 const RekapProvider = ({ children }) => {
-	const [rekap, setRekap] = useState([]);
+	const [rekaps, setRekaps] = useState([]);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 
-	const getRekap = async () => {
+	// functions
+	const getRekaps = async () => {
 		// this will return {message, data} so we destruct data only
 		const { data } = await Get("lists");
 
-		setRekap(data);
+		setRekaps(data);
 		setIsLoading(false);
 	};
 
 	useEffect(() => {
 		if (isUpdate) {
 			setIsLoading(true);
-			getRekap();
+			getRekaps();
 			setIsUpdate(false);
+			setIsLoading(false);
+		} else if (isLoading) {
+			getRekaps();
+			setIsLoading(false);
+		} else {
+			getRekaps();
 		}
-
-		getRekap();
-	}, [isUpdate]);
+	}, [isUpdate, isLoading]);
 
 	return (
 		<RekapContext.Provider
 			value={{
-				rekap,
+				rekaps,
 				isUpdate,
 				isLoading,
-				setRekap,
+				setRekaps,
 				setIsUpdate,
 				setIsLoading,
 			}}

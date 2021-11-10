@@ -14,6 +14,14 @@ const theme = createTheme({
 	palette: {
 		mode: "dark",
 	},
+	typography: {
+		h5: {
+			fontWeight: 500,
+		},
+		caption: {
+			fontWeight: "lighter",
+		},
+	},
 });
 
 ReactDOM.render(

@@ -28,6 +28,7 @@ import { RekapContext } from "../context/RekapContext";
 // utils
 import { margin } from "../utils/calculate";
 import { Create, Update } from "../utils/crud";
+import { getRekapById } from "../utils/getters";
 
 const Alert = ({ open, success, exit }) => (
 	<Dialog open={open} onClose={exit}>
@@ -57,7 +58,7 @@ const Forms = () => {
 	const { id } = useParams();
 
 	// context
-	const { rekap, isLoading, setIsUpdate } = useContext(RekapContext);
+	const { rekaps, isLoading, setIsUpdate } = useContext(RekapContext);
 
 	// states
 	const [isSuccess, setIsSuccess] = useState(true);
@@ -241,12 +242,24 @@ const Forms = () => {
 		return result;
 	}
 
-	function findById(arr, id) {
-		if (id === undefined) return;
+	function handleInitialCallOrReload(arr, id) {
+		if (id === null || id === undefined) return;
 		if (!Array.isArray(arr)) throw new Error(`Argument must an array`);
 
 		const [{ date, batch, products, packages, additionals, costs, gains }] =
-			arr.filter(({ _id }) => _id === id);
+			arr.length > 0
+				? getRekapById(id, arr)
+				: [
+						{
+							date: "",
+							batch: "",
+							products: [],
+							packages: [],
+							additionals: [],
+							costs: "",
+							gains: "",
+						},
+				  ];
 
 		setDate(date);
 		setBatch(batch);
@@ -259,9 +272,9 @@ const Forms = () => {
 
 	useEffect(() => {
 		if (isLoading === false) {
-			findById(rekap, id);
+			handleInitialCallOrReload(rekaps, id);
 		}
-	}, [id, rekap, isLoading]);
+	}, [id, rekaps, isLoading]);
 
 	return (
 		<Box style={{ padding: "1rem 0" }}>

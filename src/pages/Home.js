@@ -1,118 +1,76 @@
 import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
-import Fab from "@mui/material/Fab";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 // mui-icons
-import {
-	AddRounded as Add,
-	EditRounded as Edit,
-	DeleteRounded,
-} from "@mui/icons-material";
+import { AddRounded as Add } from "@mui/icons-material";
 
 // custom components
-import CardLeft from "../components/CardLeft";
-import CardRight from "../components/CardRight";
+import Details from "../components/Alert/Details";
+import CardGroup from "../components/Cards/CardGroup/CardGroup";
+import CardRippleWrapper from "../components/Cards/CardRippleContainer/CardRippleWrapper";
 import Charts from "../components/Charts";
 
 // context
 import { RekapContext } from "../context/RekapContext";
 
 // utils
-import { Delete } from "../utils/crud";
+// import { Delete } from "../utils/crud";
+// import { getNestedObject } from "../utils/loops";
 
 const Home = () => {
-	const { rekap, setIsUpdate } = useContext(RekapContext);
+	// context
+	const { rekaps } = useContext(RekapContext);
+	// react-router-dom
 	const history = useHistory();
 
-	const [isEditMode, setIsEditMode] = useState(false);
+	// state
+	const [isAlertOpen, setIsAlertOpen] = useState(false);
+	const [currentId, setCurrentId] = useState("");
 
-	const handleDeleteButton = (id) => {
-		setIsUpdate(true);
-		Delete("list", id);
-	};
+	// variables
+	// const rekapsId = rekaps.map(({_id}) => _id);
 
 	return (
 		<Box sx={{ py: 1 }}>
+			<Details
+				isOpen={isAlertOpen}
+				// eslint-disable-next-line
+				onClose={() => (setCurrentId(""), setIsAlertOpen(false))}
+				currentId={currentId}
+				toggleAlert={setIsAlertOpen}
+			/>
+
 			<Typography variant="h4" component="h1" align="center" gutterBottom>
 				Rekap
 			</Typography>
 			<Box>
 				<Charts />
 			</Box>
-			<Box
-				sx={{
-					display: "flex",
-					flexWrap: "wrap",
-					alignItems: "center",
-					justifyContent: "space-between",
-					p: 2,
-				}}
+			<Button
+				variant="contained"
+				startIcon={<Add />}
+				onClick={() => history.push("/form/create")}
+				sx={{ my: "3rem" }}
 			>
-				<FormGroup>
-					<FormControlLabel
-						control={<Switch />}
-						label="Edit Mode"
-						onClick={() => setIsEditMode(!isEditMode)}
-					/>
-				</FormGroup>
-				<Button
-					variant="contained"
-					startIcon={<Add />}
-					onClick={() => history.push("/form/create")}
-				>
-					Tambah Data
-				</Button>
-			</Box>
-			<Box
-				sx={{
-					py: 2,
-					display: "flex",
-					flexWrap: "wrap",
-					flexDirection: { xs: "column", sm: "row" },
-					justifyContent: { sm: "space-around" },
-				}}
-			>
-				{rekap.map(({ _id: id, date, batch, products, gains }) =>
-					products.map(({ _id: key, name, price }) => (
-						<Card key={key} sx={{ width: { sm: "250px", md: "350px" }, my: 1 }}>
-							<CardContent
-								sx={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "space-around",
-								}}
-							>
-								<CardLeft date={date} batch={batch} name={name} price={price} />
-								<CardRight costs={price} gains={gains} />
-							</CardContent>
-							{isEditMode && (
-								<Box sx={{ textAlign: "right" }}>
-									<Fab
-										size="small"
-										color="primary"
-										onClick={() => history.push(`/form/update/${id}`)}
-										sx={{ mr: 1 }}
-									>
-										<Edit />
-									</Fab>
-									<Fab size="small" onClick={() => handleDeleteButton(id)}>
-										<DeleteRounded />
-									</Fab>
-								</Box>
-							)}
-						</Card>
-					))
-				)}
-			</Box>
+				Tambah Data
+			</Button>
+			<CardGroup>
+				{rekaps.map(({ _id, date, batch, products, gains }) => (
+					<Grid item key={_id} xs={12} sm={6} md={4}>
+						<CardRippleWrapper
+							title={batch}
+							date={date}
+							//eslint-disable-next-line
+							onClick={() => (setCurrentId(_id), setIsAlertOpen(true))}
+						/>
+					</Grid>
+				))}
+			</CardGroup>
 		</Box>
 	);
 };
