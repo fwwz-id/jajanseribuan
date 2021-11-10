@@ -253,9 +253,9 @@ const Forms = () => {
 						{
 							date: "",
 							batch: "",
-							products: [],
-							packages: [],
-							additionals: [],
+							products: [{ name: "", price: "" }],
+							packages: [{ name: "", amount: "" }],
+							additionals: [{ item: "", amount: "", price: "", total: "" }],
 							costs: "",
 							gains: "",
 						},

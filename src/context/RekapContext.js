@@ -28,8 +28,6 @@ const RekapProvider = ({ children }) => {
 		} else if (isLoading) {
 			getRekaps();
 			setIsLoading(false);
-		} else {
-			getRekaps();
 		}
 	}, [isUpdate, isLoading]);
 
