@@ -24,16 +24,13 @@ import { RekapContext } from "../context/RekapContext";
 
 const Home = () => {
 	// context
-	const { rekaps } = useContext(RekapContext);
+	const { data, error } = useContext(RekapContext);
 	// react-router-dom
 	const history = useHistory();
 
 	// state
 	const [isAlertOpen, setIsAlertOpen] = useState(false);
 	const [currentId, setCurrentId] = useState("");
-
-	// variables
-	// const rekapsId = rekaps.map(({_id}) => _id);
 
 	return (
 		<Box sx={{ py: 1 }}>
@@ -60,16 +57,22 @@ const Home = () => {
 				Tambah Data
 			</Button>
 			<CardGroup>
-				{rekaps.map(({ _id, date, batch, products, gains }) => (
-					<Grid item key={_id} xs={12} sm={6} md={4}>
-						<CardRippleWrapper
-							title={batch}
-							date={date}
-							//eslint-disable-next-line
-							onClick={() => (setCurrentId(_id), setIsAlertOpen(true))}
-						/>
-					</Grid>
-				))}
+				{data && !error ? (
+					data.data.map(({ _id, date, batch }) => (
+						<Grid item key={_id} xs={12} sm={6} md={4}>
+							<CardRippleWrapper
+								title={batch}
+								date={date}
+								//eslint-disable-next-line
+								onClick={() => (setCurrentId(_id), setIsAlertOpen(true))}
+							/>
+						</Grid>
+					))
+				) : error ? (
+					<Typography variant="h2" component="p">
+						Error fetching data ...
+					</Typography>
+				) : null}
 			</CardGroup>
 		</Box>
 	);

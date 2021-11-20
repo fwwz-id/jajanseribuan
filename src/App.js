@@ -32,12 +32,12 @@ const routes = [
 ];
 
 function App() {
-	const { isLoading } = useContext(RekapContext);
+	const { data, error } = useContext(RekapContext);
 
 	return (
 		<Paper square elevation={0} sx={{ minHeight: "100vh" }}>
 			<Backdrop
-				open={isLoading}
+				open={!data && !error}
 				sx={{ color: "primary", zIndex: (theme) => theme.zIndex.drawer + 1 }}
 			>
 				<CircularProgress color="inherit" />

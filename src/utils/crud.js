@@ -11,10 +11,6 @@ export async function Create(endpoint, data) {
 	});
 }
 
-export async function Get(endpoint) {
-	return await (await fetch(`${url}/v1/${endpoint}`)).json();
-}
-
 export async function Update(endpoint, id, data) {
 	return await fetch(`${url}/v1/${endpoint}/${id}`, {
 		method: "PUT",

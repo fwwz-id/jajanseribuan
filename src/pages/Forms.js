@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 // eslint-disable-next-line
 import { useHistory, useParams } from "react-router-dom";
 
@@ -58,7 +58,7 @@ const Forms = () => {
 	const { id } = useParams();
 
 	// context
-	const { rekaps, isLoading, setIsUpdate } = useContext(RekapContext);
+	const { data, error } = useContext(RekapContext);
 
 	// states
 	const [isSuccess, setIsSuccess] = useState(true);
@@ -225,10 +225,8 @@ const Forms = () => {
 
 		// setIsUpdate false is handled in context
 		if (id !== undefined) {
-			setIsUpdate(true);
 			result = await Update("list", id, data);
 		} else {
-			setIsUpdate(true);
 			result = await Create("list", data);
 		}
 
@@ -271,10 +269,11 @@ const Forms = () => {
 	}
 
 	useEffect(() => {
-		if (isLoading === false) {
-			handleInitialCallOrReload(rekaps, id);
+		if (!error && data) {
+			handleInitialCallOrReload(data.data, id);
 		}
-	}, [id, rekaps, isLoading]);
+		// eslint-disable-next-line
+	}, [id, error, data]);
 
 	return (
 		<Box style={{ padding: "1rem 0" }}>

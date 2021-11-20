@@ -17,16 +17,18 @@ import {
 import { RekapContext } from "../../context/RekapContext";
 
 import { Delete } from "../../utils/crud";
-import { getRekapById } from "../../utils/getters";
 
 const Details = ({ isOpen, onClose, currentId, toggleAlert }) => {
 	const history = useHistory();
-	const { rekaps, setIsUpdate } = useContext(RekapContext);
-	const current = getRekapById(currentId, rekaps);
+	const { data, error } = useContext(RekapContext);
+
+	const current =
+		data && !error && currentId
+			? data.data.filter(({ _id }) => _id === currentId)
+			: [];
 
 	const handleRemove = () => {
 		toggleAlert(false);
-		setIsUpdate(true);
 		Delete("list", currentId);
 	};
 

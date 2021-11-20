@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import { BrowserRouter as Router } from "react-router-dom";
+import { SWRConfig } from "swr";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -24,15 +25,19 @@ const theme = createTheme({
 	},
 });
 
+const fetcher = async (...args) => await (await fetch(...args)).json();
+
 ReactDOM.render(
 	<React.StrictMode>
-		<RekapProvider>
-			<ThemeProvider theme={theme}>
-				<Router>
-					<App />
-				</Router>
-			</ThemeProvider>
-		</RekapProvider>
+		<SWRConfig value={{ fetcher }}>
+			<RekapProvider>
+				<ThemeProvider theme={theme}>
+					<Router>
+						<App />
+					</Router>
+				</ThemeProvider>
+			</RekapProvider>
+		</SWRConfig>
 	</React.StrictMode>,
 	document.getElementById("root")
 );
